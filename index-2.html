@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lwandle Motors – Quality Used Cars</title>
+<meta name="description" content="Browse quality used cars for sale. Contact us on WhatsApp to book a viewing.">
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#14181f; --muted:#6a7380;
+    --brand:#d62828; --brand-dark:#a81d1d; --line:#e4e7ec;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+  header{background:var(--ink);color:#fff;padding:14px 16px;position:sticky;top:0;z-index:10}
+  .bar{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .logo{font-weight:800;font-size:1.2rem;letter-spacing:.5px}
+  .logo span{color:var(--brand)}
+  .call{background:var(--brand);color:#fff;text-decoration:none;padding:8px 14px;border-radius:8px;font-weight:600;font-size:.9rem}
+  .hero{background:linear-gradient(135deg,#14181f,#2b3240);color:#fff;text-align:center;padding:44px 16px}
+  .hero h1{font-size:clamp(1.6rem,5vw,2.6rem);margin-bottom:8px}
+  .hero p{color:#c8ceda;max-width:520px;margin:auto}
+  main{max-width:1100px;margin:auto;padding:20px 16px 60px}
+  .filters{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:20px}
+  @media(min-width:640px){.filters{grid-template-columns:2fr 1fr 1fr}}
+  input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:1rem;background:#fff}
+  .grid{display:grid;grid-template-columns:1fr;gap:18px}
+  @media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
+  .card{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column}
+  .photo{aspect-ratio:16/10;background:#dfe3ea;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .tag{position:absolute;top:10px;left:10px;background:var(--brand);color:#fff;font-size:.75rem;font-weight:700;padding:4px 8px;border-radius:6px}
+  .tag.sold{background:#555}
+  .info{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .info h3{font-size:1.1rem}
+  .price{font-size:1.35rem;font-weight:800;color:var(--brand)}
+  .specs{display:flex;flex-wrap:wrap;gap:6px}
+  .specs span{background:var(--bg);border:1px solid var(--line);padding:3px 8px;border-radius:999px;font-size:.78rem;color:var(--muted)}
+  .desc{color:var(--muted);font-size:.9rem}
+  .btn{margin-top:auto;display:block;text-align:center;background:#25d366;color:#fff;text-decoration:none;padding:11px;border-radius:10px;font-weight:700}
+  .btn:hover{filter:brightness(.95)}
+  .btn.disabled{background:#aaa;pointer-events:none}
+  .empty{text-align:center;color:var(--muted);padding:40px 0;display:none}
+  footer{background:var(--ink);color:#aeb6c4;text-align:center;padding:26px 16px;font-size:.9rem}
+  footer a{color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="logo">LWANDLE <span>MOTORS</span></div>
+    <a class="call" id="callLink" href="#">Call us</a>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Quality used cars, honest prices</h1>
+  <p>Browse our stock, then message us on WhatsApp to book a viewing or test drive.</p>
+</section>
+
+<main>
+  <div class="filters">
+    <input id="search" type="search" placeholder="Search make or model (e.g. Polo)">
+    <select id="make"><option value="">All makes</option></select>
+    <select id="sort">
+      <option value="new">Newest first</option>
+      <option value="low">Price: low to high</option>
+      <option value="high">Price: high to low</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">No cars match your search.</p>
+</main>
+
+<footer>
+  <p id="address"></p>
+  <p>Mon–Fri 8:00–17:00 · Sat 9:00–13:00</p>
+  <p style="margin-top:8px">&copy; <span id="yr"></span> Lwandle Motors</p>
+</footer>
+
+<script>
+/* ============ EDIT THIS SECTION ============ */
+const SHOP = {
+  name: "Lwandle Motors",
+  whatsapp: "27XXXXXXXXX",          // number with country code, no + or spaces (e.g. 27821234567)
+  phone: "+27 XX XXX XXXX",
+  address: "Your street address, City"
+};
+
+// To add a car: copy one block, change the details, and save.
+// Put photos in an "images" folder and set image: "images/polo.jpg"
+// Set status: "available" or "sold"
+const CARS = [
+  { id:1, make:"Volkswagen", model:"Polo Vivo 1.4", year:2019, price:179900, km:78000,
+    fuel:"Petrol", trans:"Manual", status:"available", image:"",
+    desc:"Full service history, one owner, clean inside and out." },
+  { id:2, make:"Toyota", model:"Corolla Quest 1.8", year:2020, price:219900, km:61000,
+    fuel:"Petrol", trans:"Manual", status:"available", image:"",
+    desc:"Reliable and economical. Aircon, radio, spare key." },
+  { id:3, make:"Ford", model:"Ranger 2.2 XL", year:2018, price:289900, km:112000,
+    fuel:"Diesel", trans:"Manual", status:"available", image:"",
+    desc:"Strong work bakkie, canopy included, tyres in good condition." },
+  { id:4, make:"Hyundai", model:"i20 1.2 Motion", year:2021, price:199900, km:42000,
+    fuel:"Petrol", trans:"Manual", status:"sold", image:"",
+    desc:"Low mileage, still under maker's warranty." }
+];
+/* ============ END EDIT SECTION ============ */
+
+const $ = id => document.getElementById(id);
+const rand = n => "R " + n.toLocaleString("en-ZA").replace(/,/g," ");
+
+$("callLink").href = "tel:" + SHOP.phone.replace(/\s/g,"");
+$("address").textContent = SHOP.address;
+$("yr").textContent = new Date().getFullYear();
+
+[...new Set(CARS.map(c=>c.make))].sort().forEach(m=>{
+  const o=document.createElement("option"); o.value=m; o.textContent=m; $("make").appendChild(o);
+});
+
+function render(){
+  const q=$("search").value.trim().toLowerCase(), mk=$("make").value, s=$("sort").value;
+  let list=CARS.filter(c=>(!mk||c.make===mk)&&(`${c.make} ${c.model}`.toLowerCase().includes(q)));
+  if(s==="low") list.sort((a,b)=>a.price-b.price);
+  else if(s==="high") list.sort((a,b)=>b.price-a.price);
+  else list.sort((a,b)=>b.year-a.year);
+
+  $("grid").innerHTML = list.map(c=>{
+    const title=`${c.year} ${c.make} ${c.model}`;
+    const msg=encodeURIComponent(`Hi, I'm interested in the ${title} (${rand(c.price)}) on your website.`);
+    const sold=c.status==="sold";
+    const photo=c.image
+      ? `<img src="${c.image}" alt="${title}" loading="lazy">`
+      : "🚗";
+    return `<article class="card">
+      <div class="photo">${photo}<span class="tag ${sold?"sold":""}">${sold?"SOLD":"FOR SALE"}</span></div>
+      <div class="info">
+        <h3>${title}</h3>
+        <div class="price">${rand(c.price)}</div>
+        <div class="specs"><span>${c.km.toLocaleString("en-ZA")} km</span><span>${c.fuel}</span><span>${c.trans}</span></div>
+        <p class="desc">${c.desc}</p>
+        <a class="btn ${sold?"disabled":""}" target="_blank" rel="noopener"
+           href="https://wa.me/${SHOP.whatsapp}?text=${msg}">${sold?"Sold":"WhatsApp about this car"}</a>
+      </div></article>`;
+  }).join("");
+  $("empty").style.display = list.length ? "none" : "block";
+}
+["input","change"].forEach(e=>{$("search").addEventListener(e,render);$("make").addEventListener(e,render);$("sort").addEventListener(e,render);});
+render();
+</script>
+</body>
+</html>
